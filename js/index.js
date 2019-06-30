@@ -1,5 +1,4 @@
 import * as settlements from './settlements.js';
-console.log(settlements);
 
 if (storageAvailable('localStorage')) {
     console.log('retrieving the overseer\'s data');
@@ -24,7 +23,6 @@ if (storageAvailable('localStorage')) {
     
 } else {
     console.log('Storage is unavailable for some reason');
-    console.log(storageAvailable('localStorage'));
 }
 
 function addCharacter(nodata) {
@@ -70,21 +68,16 @@ function delCharacter() {
 function chCharacter() {
     console.log('preparing to switch charater');
     let allChar = JSON.parse(localStorage.getItem('osData_Characters'));
-    console.log(allChar);
     allChar.sort(function (a,b) {
         let vA = a.name.toLowerCase(), vB = b.name.toLowerCase();
         if ( vA > vB ) { return 1; }
         if ( vA < vB ) { return -1; }
         return 0;
     });
-    console.log(allChar);
     
     // we need a modal here
     let modal = document.createElement('div');
     modal.className = 'modal';
-    modal.addEventListener('click', function() {
-        modal.remove();
-    });
     
     let mContent = document.createElement('div');
     mContent.className = 'mContent';
@@ -106,6 +99,7 @@ function chCharacter() {
                 if ( i.id === e.target.osData) {
                     i.lastactive = (new Date()).toString();
                     localStorage.setItem('osData_Characters', JSON.stringify(allChar));
+                    modal.remove();
                     loadCharacter();
                 }
             });
@@ -117,18 +111,15 @@ function chCharacter() {
     mContent.appendChild(cList);
     
     modal.appendChild(mContent);
-    
     document.querySelector('body').appendChild(modal);
 }
 
 function loadCharacter() {
     console.log('loading character');
-    console.log(localStorage);
-    
     let allChar = JSON.parse(localStorage.getItem('osData_Characters'));
     
     console.log('checking for latest activity');
-    
+
     let lastAct = new Date(0);
     let currChar = {};
     Object.values(allChar).forEach(function(i) {

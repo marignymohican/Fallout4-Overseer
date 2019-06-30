@@ -5,8 +5,11 @@
 // defense >= population = 20 :)
 // bed.roofed = 10 :)
 
+import modal from './modal.js';
+
+let settlements = ["Abernathy farm","Boston Airport","Bunker Hill","The Castle","Coastal cottage","County Crossing","Covenant","Croup Manor","Egret Tours Marina","Finch Farm","Graygarden","Greentop Nursery","Hangman's Alley","Home Plate","Jamaica Plain","Kingsport Lighthouse","Murkwater construction","Nordhagen Beach","Oberland Station","Outpost Zimonja","Red Rocket Truck Stop","Sanctuary Hills","The Slog","Somerville Place","Spectacle Island","Starlight Drive-In","Sunshine Tidings Co-op","Taffington Boathouse","Tenpines Bluff","Warwick Homestead","The Mechanist's lair","Longfellow's cabin","Dalton farm","National Park Visitor's Center","Echo Lake Lumber","Vault 88","Nuka-World Red Rocket"];
 let stlCats = ['population','beds','food','water','electricity','defense'];
-    
+
 let stlElement = function (stl) {
     let stlRow = document.createElement('div');
     stlRow.className = 'stlRow';
@@ -23,12 +26,7 @@ let stlElement = function (stl) {
     stlCats.forEach(function(cat) {
         let stlData = document.createElement('div');
         stlData.className = 'stlData stl_' + cat;
-        
-        //let stlImg = document.createElement('img');
-        //stlImg.src = 'img/' + cat + '.png';
-        //stlImg.alt = cat;
-        //stlData.appendChild(stlImg);
-        
+
         let stlCount = document.createElement('div');
         stlCount.innerHTML = stl[cat];
         stlData.appendChild(stlCount);
@@ -66,6 +64,7 @@ function list(cid) {
         document.getElementById('stlContent').appendChild(stl);
     });
 
+    // populate the header row
     document.querySelectorAll('#stlHead .stlData').forEach(function(data) {
         let cat = data.className.split(' ')[1];
         let catValue = 0;
@@ -90,27 +89,64 @@ function list(cid) {
     });
 }
 
-function add(cid) {
-    console.log('adding new settlement for ' + cid);
-    let stlName = prompt('Settlement name:');
+function addSettlement(cid) {
+    console.log('adding new settlement for character id:' + cid);
     
-    if ( stlName && stlName !== '' ) {
-        let stlNew = {};
-        stlNew.name = stlName;
-        stlNew.cid = cid;
-        stlNew.id = Date.now();
-        stlCats.forEach(function(i) {
-            stlNew[i] = 0;
+    // get the current settlements for this character
+    let settCurr = JSON.parse(localStorage.getItem('osData_Settlements'));
+    console.log(Object.values(settCurr));
+    
+    // get a list of available settlements
+    let settList = settlements.filter(function(s) {
+        let available = true;
+        settCurr.forEach(function(sc) {
+            if ( sc.cid === cid && sc.name === s ) {
+                available = false;
+            }
+        });
+        return available;
+    });
+    settList.sort();
+    
+    console.log(settList);
+    
+    let chooser = document.createElement('div');
+    chooser.className = 'modalChooser';
+    
+    let chDropper = document.createElement('ul');
+    chDropper.id = 'selectSettler';
+    settList.forEach((s) => {
+        let chOption = document.createElement('li');
+        chOption.innerHTML = s;
+        
+        chOption.addEventListener('click', function(e) {
+            let stlNew = {};
+            stlNew.name = e.target.innerHTML;
+            stlNew.cid = cid;
+            stlNew.id = Date.now();
+            stlCats.forEach(function(i) {
+                stlNew[i] = 0;
+            });
+            
+            settCurr.push(stlNew);
+            localStorage.setItem('osData_Settlements', JSON.stringify(settCurr));
+            console.log('settlement data written');
+            
+            console.log(settModal);
+            
+            document.querySelector('.modal').className = 'modal closed';
+            document.getElementsByClassName('modal')[0].remove();            
+            list(cid); // rewrite the settlement list panel
+            displaySettlement(stlNew); // display the newly added settlement
         });
         
-        let stlData = JSON.parse(localStorage.getItem('osData_Settlements'));
-        stlData.push(stlNew);
-        localStorage.setItem('osData_Settlements', JSON.stringify(stlData));
         
-        list(cid);
-        
-        displaySettlement(stlNew);
-    }
+        chDropper.appendChild(chOption);
+    });
+    chooser.appendChild(chDropper);
+
+    let settModal = new modal('Choose a Settlement:', chooser);
+    document.getElementById('overseer').appendChild(settModal);
 }
 
 function displaySettlement(settlement) {
@@ -121,7 +157,7 @@ function displaySettlement(settlement) {
     sd.querySelector('h2').id = settlement.id;
     
     let population = settlement.population;
-    sd.querySelectorAll('.stlData div').forEach(function(count) {
+    sd.querySelectorAll('.stlData .stl_value').forEach(function(count) {
         let cat = count.parentElement.className.split(' ')[1].replace(/stl_/,'');
         count.innerHTML = settlement[cat];
         
@@ -138,69 +174,46 @@ function displaySettlement(settlement) {
     
     sd.className = '';
     
-    document.getElementById('sd_settlers').innerHTML = "this is where we should put some settler datat";
+    document.getElementById('settlements').className = 'closed';
+    document.getElementById('settlementDisplay').className = '';
 }
 
-function editSettlement() {
-    document.getElementById('sd_edit').innerHTML = 'Save';
-    document.getElementById('sd_edit').removeEventListener('click', editSettlement);
-    document.getElementById('sd_edit').addEventListener('click', saveSettlement);
-    
-    let sd = document.getElementById('settlementDisplay');
-    let field = () => {
-        let f = document.createElement('input');
-        f.type = 'text';
-        return f;
-    };
-    
-    let sName = sd.querySelector('h2');
-    let h2 = field();
-    h2.value = sName.innerHTML;
-    sName.innerHTML = '';
-    sName.appendChild(h2);
-    
-    sd.querySelectorAll('.stlData div').forEach(function (counter) {
-        let cat = field();
-        cat.value = counter.innerHTML;
-        counter.innerHTML = '';
-        counter.appendChild(cat);
-    });
-}
+function updateSettlement(category, op) {
+    let cid = Number(document.getElementsByClassName('characterName')[0].osData.replace(/osData_/,''));
+    let sid = Number(document.querySelector('h2.settlementname').id);
 
-function saveSettlement() {
-    document.getElementById('sd_edit').innerHTML = 'Edit';
-    document.getElementById('sd_edit').removeEventListener('click', saveSettlement);
-    document.getElementById('sd_edit').addEventListener('click', editSettlement);
+    console.log(cid,sid);
     
-    let sid = Number(document.querySelector('#settlementDisplay h2').id);
     let settlements = JSON.parse(localStorage.getItem('osData_Settlements'));
-    settlements.forEach(function(settlement) {
-        if (settlement.id === sid ) {
-            let settD = document.querySelector('#settlementDisplay');
+    
+    settlements.forEach(function(s) {
+        console.log(s);
+        if ( s.cid === cid && s.id === sid ) {
+            console.log(op);
+            if ( op === '+' ) {
+                s[category]++;
+            }
+            if ( op === '-' ) {
+                if ( s[category] !== 0 ) {
+                    s[category]--;
+                }
+            }
             
-            settlement.name = settD.querySelector('h2 input').value;
-            
-            settD.querySelectorAll('.stlData').forEach(function(sData) {
-                let cat = sData.className.split(' ')[1].replace(/stl_/,'');
-                console.log(cat);
-                settlement[cat] = sData.querySelector('input').value;
-            });
             localStorage.setItem('osData_Settlements', JSON.stringify(settlements));
-            
-            list(settlement.cid);
-            displaySettlement(settlement);
+            list(cid);
+            displaySettlement(s);
         }
     });
-    
 }
 
 function init(cid) {
     console.log('preparing settlement data');
     
+    // events to update individual settlement
     document.getElementById('sd_back').addEventListener('click', function() {
+        document.getElementById('settlements').className = '';
         document.getElementById('settlementDisplay').className = 'closed';
     });
-    document.getElementById('sd_edit').addEventListener('click', editSettlement);
     document.getElementById('sd_del').addEventListener('click', function(e) {
         if ( confirm('This settlement will be removed') ) {
             //e.target.parentElement.children[0].id
@@ -210,11 +223,23 @@ function init(cid) {
             });
             localStorage.setItem('osData_Settlements', JSON.stringify(newStl));
             list(cid);
+            
+            document.getElementById('settlements').className = '';
             document.getElementById('settlementDisplay').className = 'closed';
         }
     });
+    document.querySelectorAll('.stl_change > span').forEach(function(cButton) {
+        cButton.addEventListener('click', function(e) {
+            console.log(e.target.parentElement.parentElement.className.split(' ')[1].replace('stl_'));
+            updateSettlement(
+                         e.target.parentElement.parentElement.className.split(' ')[1].replace(/stl_/,''),
+                         e.target.innerHTML);
+        });
+    });
+    
+    // events on settlement list
     document.getElementById('stl_addNew').addEventListener('click', function() {
-        add(cid);
+        addSettlement(cid);
     });
     
     if ( !localStorage.getItem('osData_Settlements') ) {

@@ -44,31 +44,35 @@ input[type="text"] {
 }
 
 #overseer #overseerNav {
-    margin: 0 auto;
+    margin: 0 15px 10px;
     padding: 10px 0;
     border-bottom: 4px solid var(--fColor);
     width: calc(100% - 30px);
-    display: flex;
 }
 #overseer #overseerNav .characterName {
-    display: inline-block;
-    flex-grow: 2;
+    margin-left: -10px;
     font-size: 3em;
     font-weight: bold;
 }
 #overseer #overseerNav nav {
-    width: 150px;
-
+    margin-left: -10px;
+    width: 100%;
 }
 #overseer #overseerNav nav ul {
-    list-style-type: none;    
+    list-style-type: none;
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
 }
 #overseer #overseerNav nav ul li {
-    width: 100%;
-    font-size: 0.8em;
+    display: inline-block;
+    font-size: 0.6em;
 }
 #overseer #overseerNav nav ul li:nth-child(n+2) {
-    margin-top: -2px;
+    margin-left: -2px;
+}
+#overseer #overseerNav nav button {
+    padding: 6px;
 }
 
 #overseer #overseerPanel {
@@ -78,17 +82,19 @@ input[type="text"] {
 }
 
 .modal {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: fixed;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
+    overflow: scroll;
     background-color: rgba(0,0,0,0.5);
 }
 .modal .mContent {
-    margin: 100px auto 0;
+    margin: 0 auto;
     border: 2px solid var(--fColor);
     width: 80%;
     max-width: 350px;
@@ -100,7 +106,13 @@ input[type="text"] {
 }
 .modal .mContent ul {
     list-style-type: none;
-    width: 100%;
+    margin: 10px auto 25px;
+    padding: 10px 0;
+    border-top: 2px solid var(--fColor);
+    border-bottom: 2px solid var(--fColor);
+    width: 90%;
+    max-height: 50vh;
+    overflow-y: scroll;
     font-size: 1.5em;
     text-align: center;
 }
@@ -108,7 +120,7 @@ input[type="text"] {
     margin: 0 auto;
     padding: 3px 0;
     border-bottom: 1px solid var(--fColor);
-    width: 75%;
+    width: 90%;
 }
 .modal .mContent ul li:last-child {
     border-bottom: none;
@@ -125,6 +137,7 @@ input[type="text"] {
     font-weight: bold;
 }
 
+
 /* settlement list */
 #stlHead {
     margin-top: 10px;
@@ -137,7 +150,7 @@ input[type="text"] {
     font-size: 2.25em;
 }
 #stlFooter {
-    margin-top: 20px;
+    margin: 50px auto;
     font-weight: bold;
 }
 .stlRow {
@@ -193,6 +206,29 @@ input[type="text"] {
     flex-grow: 1;
     font-size: 3em;
     text-align: center;
+}
+.stl_change {
+    display: flex;
+    justify-content: space-around;
+    margin: 0 auto;
+    width: 80%;
+}
+.stl_change > span {
+    display: inline-block;
+    width: 0.75em;
+    height: 0.75em;
+    border-radius: 3px;
+    background-color: var(--fColor);
+    line-height: 0.75em;
+    font-size: 0.75em;
+    font-weight: bold;
+    color: var(--bgColor);
+}
+.poor .stl_change > span {
+    color: var(--bgColor);
+}
+#sd_settlers {
+    margin-top: 25px;
 }
 /* settlement display */
 
