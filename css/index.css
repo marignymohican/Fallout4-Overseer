@@ -17,6 +17,19 @@
     color: var(--fColor);
 }
 
+h1 {
+    margin-left: -8px;
+    font-size: 3em;
+    font-weight: bold;
+}
+h3 {
+    font-size: 2em;
+}
+h5, h5 > * {
+    font-size: 1.2em;
+    background-color: var(--fColor);
+    color: var(--bgColor);
+}
 button {
     border: 2px solid var(--fColor);
     width: 100%;
@@ -26,59 +39,6 @@ button:hover,
 button:active {
     background-color: var(--fColor);
     color: var(--bgColor);
-}
-input[type="text"] {
-    width: 90%;
-    background-color: #000;
-    text-align: center;
-}
-
-#overseer {
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
-    width: 100%;
-    max-width: 500px;
-    height: 100%;
-    overflow: hidden;
-}
-
-#overseer #overseerNav {
-    margin: 0 15px 10px;
-    padding: 10px 0;
-    border-bottom: 4px solid var(--fColor);
-    width: calc(100% - 30px);
-}
-#overseer #overseerNav .characterName {
-    margin-left: -10px;
-    font-size: 3em;
-    font-weight: bold;
-}
-#overseer #overseerNav nav {
-    margin-left: -10px;
-    width: 100%;
-}
-#overseer #overseerNav nav ul {
-    list-style-type: none;
-    display: flex;
-    justify-content: flex-start;
-    width: 100%;
-}
-#overseer #overseerNav nav ul li {
-    display: inline-block;
-    font-size: 0.6em;
-}
-#overseer #overseerNav nav ul li:nth-child(n+2) {
-    margin-left: -2px;
-}
-#overseer #overseerNav nav button {
-    padding: 6px;
-}
-
-#overseer #overseerPanel {
-    position: relative;
-    overflow-y: scroll;
-    flex-grow: 2;
 }
 
 .modal {
@@ -103,6 +63,28 @@ input[type="text"] {
     font-size: 2em;
     font-weight: bold;
     text-align: center;
+}
+.modal .mContent .addCharacter {
+    margin: 10px 0;
+    text-align: center;
+}
+.modal .mContent input[type="text"] {
+    margin-right: 10px;
+    padding: 4px 10px;
+    border: 1px solid var(--fColor);
+    background-color: #000;
+}
+.modal .mContent button {
+    padding: 0 10px;
+    border: 1px solid var(--fColor);
+    width: auto;
+    background-color: var(--fColor);
+    color: var(--bgColor);
+}
+.modal .mContent button:hover,
+.modal .mContent button:active {
+    background-color: var(--bgColor);
+    color: var(--fColor);
 }
 .modal .mContent ul {
     list-style-type: none;
@@ -129,6 +111,8 @@ input[type="text"] {
     border: none;
     padding: 4px;
     width: 75%;
+    background-color: var(--bgColor);
+    color: var(--fColor);
 }
 .modal .mContent ul li button:hover,
 .modal .mContent ul li button:active {
@@ -137,35 +121,96 @@ input[type="text"] {
     font-weight: bold;
 }
 
+#overseer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    overflow: hidden;
+}
+#overseer .os_Panel {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    flex-direction: column;
+    margin: 0 15px 10px;
+    padding: 10px 0;
+    width: calc(100% - 30px);
+    height: calc(100% - 20px);
+}
 
-/* settlement list */
-#stlHead {
-    margin-top: 10px;
-    border-bottom: 1px solid var(--fColor);
+#overseer .os_Panel nav {
+    border-bottom: 4px solid var(--fColor);
+    width: 100%;
 }
-#stl_addNew {
-    font-size: 2em;
+#overseer .os_Panel nav ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: flex-start;
+    margin: 0 0 10px -8px;
+    width: 100%;
 }
-#stlHead div:first-child {
-    font-size: 2.25em;
+#overseer .os_Panel nav ul li {
+    display: inline-block;
+    font-size: 0.6em;
 }
-#stlFooter {
-    margin: 50px auto;
-    font-weight: bold;
+#overseer .os_Panel nav ul li:nth-child(n+2) {
+    margin-left: -2px;
 }
-.stlRow {
+#overseer .os_Panel nav button {
+    padding: 6px;
+}
+#overseer .os_Panel header {
+    display: flex;
+    margin: 10px 0;
+    justify-content: space-around;
+}
+#overseer .os_Panel header table {
+    width: 100%;
+}
+#overseer .os_Panel header table tr {
     display: flex;
 }
-#stlContent .stlRow {
-    padding: 5px 0;
+#overseer .os_Panel header table .stlData {
+    flex-grow: 1;
+}
+#overseer .os_Panel .os_Panel_Content {
+    flex-grow: 2;
+    overflow-y:scroll;
+}
+
+/* settlement list */
+#os_Character .os_Panel_Content table,
+#os_Character .os_Panel_Content table tr {
+    width: 100%;
+}
+#os_Character .os_Panel_Content table tr {
+    display: flex;
 }
 .stlData {
     display: inline-block;
-    width: 1.8em;
-    font-size: 1.2em;
+    width: 1.5em;
+    font-size: 1.3em;
     text-align: center;
+    white-space:nowrap;
+    overflow: hidden;
 }
-.stlData:first-child {
+header .stlData {
+    width: 2em;
+    font-size: 1.8em;
+}
+header .stlData span {
+    display: block;
+    width: 100%;
+}
+.os_Panel_Content tr:nth-child(n+2) .stlData svg {
+    display: none;
+}
+.os_Panel_Content .stlData:first-child {
     flex-grow: 2;
     text-align: left;
     overflow: hidden;
@@ -176,7 +221,7 @@ input[type="text"] {
     height: 1.25em;
     fill: var(--fColor); 
 }
-.stlData.poor * {
+.stlData.poor > * {
     color: red;
     fill: red;
 }
@@ -186,54 +231,128 @@ input[type="text"] {
 }
 /* settlement list */
 
+
 /* settlement display */
-#settlementDisplay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-#settlementDisplay h2 {
-    font-size: 3em;
-}
-#settlementDisplay button {
+.settlementList {
     margin-bottom: 15px;
-    padding: 5px 8px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--fColor);
+}
+.settlementList .sListHeader {
+    display: flex;
+    justify-content: space-between;
+}
+.settlementList .sListHeader {
     width: auto;
 }
-#settlementDisplay .stlData {
-    flex-grow: 1;
-    font-size: 3em;
-    text-align: center;
+.settlementList h3::after {
+    margin-left: 5px;
+    content: '\000BB';
 }
-.stl_change {
-    display: flex;
-    justify-content: space-around;
-    margin: 0 auto;
-    width: 80%;
-}
-.stl_change > span {
+.settlementList .os_addNew {
     display: inline-block;
-    width: 0.75em;
-    height: 0.75em;
-    border-radius: 3px;
-    background-color: var(--fColor);
-    line-height: 0.75em;
-    font-size: 0.75em;
-    font-weight: bold;
-    color: var(--bgColor);
+    margin:  7px 15px 0;
+    height: 1.5em;
+    font-size: 0.8em;
 }
-.poor .stl_change > span {
-    color: var(--bgColor);
+.settlementList .os_addNew button {
+    padding: 4px;
 }
-#sd_settlers {
-    margin-top: 25px;
+
+.settlementList ul {
+    display: none;
+}
+.settlementList.open ul {
+    display: block;
+}
+.settlementList.open ul li {
+    margin-bottom: 10px;
+}
+.sListItemHeader {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.5em;
+}
+.sListItemHeader button {
+    margin: 4px 15px 0;
+    padding: 2px 6px;
+    width: auto;
+    font-size: 0.4em;
 }
 /* settlement display */
 
-/* animations */
-.closed {
+/* resources */
+.os_resource_buttons {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin: 10px 5px;
+    font-size: 0.8em;
+}
+.modal .mContent .os_resource_buttons button {
+    width: auto;
+    margin-bottom: 5px;
+    padding: 4px;
+    border-width: 1px;
+    background-color: var(--bgColor);
+    color: var(--fColor);
+}
+.modal .mContent .os_resource_buttons button.clicked {
+    background-color: var(--fColor);
+    color: var(--bgColor);
+}
+#os_resource_ok {
+    margin: 10px;
+    text-align: center;
+    font-size: 1.25em;
+}
+
+.os_resource_list {
+    margin: 0 5px;
+}
+.os_resource_list h5,
+.os_resource {
+    display: flex;
+    margin-bottom: 10px;
+}
+.os_resource_list h5 > span:first-child,
+.os_resource > div:first-child {
+    flex-grow: 1;
+    padding-left: 5px;
+}
+.os_resource_list h5 svg {
+    margin: 4px 0;
+    width: 1em;
+    height: 1em;
+    fill: var(--bgColor);
+    background-color: var(--fColor);
+}
+.os_resource_list .quantities {
+    display: flex;
+    width: 100px;
+}
+.os_resource_list .quantities > span {
+    display: inline-block;
+    width: 50px;
+    text-align: center;
+}
+.os_resource_list h5 .quantities > span {
+    background-color: var(--fColor);    
+}
+.os_resource_list.food .quantities > span:last-child,
+.os_resource_list.electricity .quantities > span:last-child {
     display: none;
 }
-/* animations */
+.os_resource .addrem span {
+    display: inline-block;
+    margin-right: 15px;
+    border-radius: 4px;
+    width: 36px;
+    height: 0.9em;
+    line-height: 0.9em;
+    text-align: center;
+    background-color: var(--fColor);
+    color: var(--bgColor);
+}
+
+/* resources */
